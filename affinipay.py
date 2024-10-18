@@ -161,9 +161,6 @@ def test_validate_invoice_details(driver):
     driver.close()
     driver.switch_to.window(original_window)
 
-# Utility function to get the text of an element by its label
-def get_invoice_field(label):
-    return driver.find_element(By.XPATH, f"//td[text()='{label}']/following-sibling::td").text
 
 # Main script to run the test cases
 if __name__ == "__main__":
