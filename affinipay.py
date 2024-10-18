@@ -5,16 +5,19 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-# Set up driver (Make sure to use the correct path to your WebDriver)
+# Define the base URL
+BASE_URL = "https://automation-sandbox-python-mpywqjbdza-uc.a.run.app"
+
+# Set up driver
 def setup_browser():
     driver = webdriver.Firefox()
-    driver.get("https://automation-sandbox-python-mpywqjbdza-uc.a.run.app")
+    driver.get(BASE_URL)
     driver.maximize_window()
     return driver
 
 # Utility function for login
 def login(driver, username, password):
-    driver.get("https://automation-sandbox-python-mpywqjbdza-uc.a.run.app")
+    driver.get(BASE_URL)
     
     # Wait until the username field is present using the name attribute
     WebDriverWait(driver, 10).until(
@@ -60,7 +63,7 @@ def test_login_invalid(driver):
     ]
     
     for username, password in invalid_credentials:
-        driver.get("https://automation-sandbox-python-mpywqjbdza-uc.a.run.app")
+        driver.get(BASE_URL)
         
         # Wait until the 'username' field is present
         WebDriverWait(driver, 20).until(
@@ -91,7 +94,7 @@ def test_login_invalid(driver):
 
 # Test case TC003 - Validate invoice details
 def test_validate_invoice_details(driver):
-    driver.get("https://automation-sandbox-python-mpywqjbdza-uc.a.run.app")
+    driver.get(BASE_URL)
     login(driver, "demouser", "abc123")
     time.sleep(2)  # Wait for redirection
     
@@ -139,7 +142,8 @@ def test_validate_invoice_details(driver):
     assert driver.find_element(By.XPATH, "//td[text()='Total Stay Amount']/following-sibling::td").text == expected_data["Total Stay Amount"]
     assert driver.find_element(By.XPATH, "//td[text()='Check-In']/following-sibling::td").text == expected_data["Check-In"]
     assert driver.find_element(By.XPATH, "//td[text()='Check-Out']/following-sibling::td").text == expected_data["Check-Out"]
-
+    
+    # Verify 'Customer Details' value
     cust_details_value = driver.find_element(By.XPATH, "//h5[text()='Customer Details']/following-sibling::div").text
     assert cust_details_value.strip() == expected_data["Customer Details"], f"Expected Customer Details: {expected_data['Customer Details']}, but got {cust_details_value.strip()}"
 
@@ -160,7 +164,6 @@ def test_validate_invoice_details(driver):
     # Close the new window and switch back to the original window
     driver.close()
     driver.switch_to.window(original_window)
-
 
 # Main script to run the test cases
 if __name__ == "__main__":
